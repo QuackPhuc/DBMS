@@ -1,0 +1,206 @@
+{
+  "main": {
+    "id": "0f836a0be4288c23",
+    "type": "split",
+    "children": [
+      {
+        "id": "c0f21b2146bdafc5",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "23603f5ccc341649",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Bài tập.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "370f904b880926a8",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Relational Algebra.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "e379e7eb3f2d2072",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "Excalidraw/Join.png"
+              }
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "39aaa0cf6ca2d90c",
+    "type": "split",
+    "children": [
+      {
+        "id": "42e97145f8cc1e32",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7e50bb0e3e5fb8a7",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "86f4b57fc7caec3b",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "8367e7ad5825005c",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200
+  },
+  "right": {
+    "id": "c2d695d3b8917c2c",
+    "type": "split",
+    "children": [
+      {
+        "id": "bf707d87b85223da",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4905d6380b72d3a8",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Relational Algebra.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "d90b88ed38422eab",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Relational Algebra.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "7c2bb06a841ceeda",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "d5eae8d15f3cb700",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Relational Algebra.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "obsidian-excalidraw-plugin:Create new drawing": false
+    }
+  },
+  "active": "370f904b880926a8",
+  "lastOpenFiles": [
+    "Excalidraw/Join.png",
+    "Relational Algebra.md",
+    "Integrity Constraints.md",
+    "Relational data model.md",
+    "Relational calculus.md",
+    "Bài tập.md",
+    "Functional Dependencies and Normalization.md",
+    "Entity-Relationship model.md",
+    "Excalidraw/GB.md",
+    "Excalidraw/Drawing 2024-06-22 16.08.14.excalidraw.md",
+    "Excalidraw/ex_1_a.md",
+    "Excalidraw/Pasted Image 20240621093027_151.png",
+    "Excalidraw/BCNF.md",
+    "Excalidraw/Pasted Image 20240620165232_381.png",
+    "Excalidraw/elimination partial dependencies.md",
+    "Excalidraw/NF3_final.md",
+    "Excalidraw/NF3.md",
+    "Excalidraw/Dependencies indent.md",
+    "Excalidraw/reass 2.md",
+    "Excalidraw/Reassignment.md",
+    "Excalidraw/1NF.md",
+    "Excalidraw/Armstrong's inference rules.md",
+    "Excalidraw/EX_IC1.md",
+    "Excalidraw/join.md",
+    "Excalidraw/FK.md",
+    "Excalidraw/Drawing 2024-06-19 20.11.53.excalidraw.md",
+    "Untitled.canvas",
+    "Excalidraw/division.md",
+    "Excalidraw/self foreignkey.md",
+    "Excalidraw"
+  ]
+}
