@@ -50,7 +50,7 @@ Hãy phát biểu bối cảnh, nội dung, và bảng tầm ảnh hưởng cho 
 Context: CHUYENDI, THANHTOAN, THANHVIEN
 Content:
 - Normal Language: Tổng các khoản thanh toán cho 1 chuyến đi phải nhỏ hơn hoặc bằng tổng ngân sách của chuyến đi đó.
-- Formal Language: $$\begin{align*}&(\forall t)(CHUYENDI(t) \ \wedge \\ &((\exists s)(THANHVIEN(s) \wedge s.MACD = t.MACD) \ \wedge \\ &((\exists u)(THANHTOAN(u) \wedge u.MATV = s.MATV) \ \wedge \\ &t.TONGNGANSACH \geq sum(u.SOTIEN))\end{align*}$$
+- Formal Language: $$\begin{align*}&(\forall t)(CHUYENDI(t) \ \wedge \\ &((\forall s)(THANHVIEN(s) \wedge s.MACD = t.MACD) \ \wedge \\ &((\forall u)(THANHTOAN(u) \wedge u.MATV = s.MATV) \ \wedge \\ &t.TONGNGANSACH \geq sum(u.SOTIEN))\end{align*}$$
 Influence Table:
 
 |           | insert | delete | modify          |
@@ -120,8 +120,8 @@ Context: DEAN, CONGVIEC, DEANCV
 Content:
 $$\begin{align*}
 &(\forall t)(DEAN(t) \ \wedge \\
-&(\exists s)DEAN\_CV(s) \ \wedge \ t.MADA = s.MADA \ \wedge \\
-&(\exists u)CONGVIEC(u) \ \wedge \ s.MACV = u.MACV \ \wedge \\
+&(\forall s)DEAN\_CV(s) \ \wedge \ t.MADA = s.MADA \ \wedge \\
+&(\forall u)CONGVIEC(u) \ \wedge \ s.MACV = u.MACV \ \wedge \\
 &t.CHIPHIDA = sum(u.CHIPHICV))
 \end{align*}$$
 Influence Table
@@ -260,9 +260,226 @@ Lược đồ SAMPHAM_THAU, NHATHAU đạt 2NF. Vì còn phụ thuộc bắc c�
 
 #### b) Chuẩn hóa lược đồ về dạng chuẩn BCNF
 Tách các thuộc tính trong phụ thuộc bắc cầu ra thành các lược đồ quan hệ riêng.
-f1: MA_GT → TEN_GT, NGAYMO, NGAYDONG, MA_SP
-f2: MA_SP → MA_SP, TEN_SP, THONGSO_KT, LOAI_SP
+```python
+R1(MA_GT, TEN_GT, NGAYMO, NGAYDONG, MA_SP)
+f1: MA_GT -> TEN_GT, NGAYMO, NGAYDONG, MA_SP
+
+R2(MA_SP, MA_SP, TEN_SP, THONGSO_KT, LOAI_SP)
+f2: MA_SP -> MA_SP, TEN_SP, THONGSO_KT, LOAI_SP
+
+R3(LOAI_SP, GIA_DUKIEN)
 f3: LOAI_SP -> GIA_DUKIEN
-f4: MA_NT → TEN_NT, DCHI_NT, DTHOAI_NT, NANG_LUC, MALOAI_NT
-f5: MALOAI_NT → TENLOAI_NT
-f6: MA_HST → MA_NT, MA_GT, NGAY_HST, GIA_HST, TRUNG_THAU, DIEM_HST
+
+R4(MA_NT, TEN_NT, DCHI_NT, DTHOAI_NT, NANG_LUC, MALOAI_NT)
+f4: MA_NT -> TEN_NT, DCHI_NT, DTHOAI_NT, NANG_LUC, MALOAI_NT
+
+R5(MALOAI_NT, TENLOAI_NT)
+f5: MALOAI_NT -> TENLOAI_NT
+
+R6(MA_HST, MA_NT, MA_GT, NGAY_HST, GIA_HST, TRUNG_THAU, DIEM_HST)
+f6: MA_HST -> MA_NT, MA_GT, NGAY_HST, GIA_HST, TRUNG_THAU, DIEM_HST
+```
+
+# 4
+**DIENVIEN**(***MADV***, HODV, TEDV, GIOITINH)
+**PHIM**(***MAPH***, TENPH, NAM, DOANHTHU)
+**DAODIEN**(***MADD***, DODD, TENDD)
+**THAMGIA**(***MADV, MAPH***, VAIDIEN)
+**THUCHIEN**(***MAPH, MADD***)
+## 1 - TRUY VẤN(relational algebra)
+#### a) Cho biết họ tên và vai diễn của các diễn viên tham gia trong các bộ phim được sản xuất trong thập niên 1990(từ 1990 - 1999 bao gồm cả 2 năm đó)
+$$\begin{align*}
+\pi_{_{HODV, TENDV, VAIDIEN}}\sigma_{_{NAM \geq 1990 \wedge NAM \leq 1999}}(DIENVIEN \Join THAMGIA \Join PHIM)
+\end{align*}$$
+#### b) Cho biết mã số của các cặp diễn viên đã đóng cùng nhau trong ít nhất 2 bộ phim.
+$$\begin{align*}
+&r_1 \leftarrow \pi_{_{MADV}}(DIENVIEN) \\
+&r_2 \leftarrow \pi_{_{MADV}}(DIENVIEN) \\
+&r_3(DV1, DV2, PHIM) \leftarrow \pi_{_{r_1.MADV, r_2.MADV, MAPH}}(r_1 \Join r_2 \Join PHIM) \\
+&KQ \leftarrow {\sigma_{_{COUNT\_PHIM \geq 2}}} \ (_{_{DV1, DV2}}ℱ_{_{COUNT(PHIM)}}(r_3))
+\end{align*}$$
+## 2 - Xác định và mô tả mộ ràng buộc toàn vẹn của cơ sở dữ liệu trên.
+#### a) Mỗi diễn viên có một mã số duy nhất, họ tên, giới tính.
+Context: DIENVIEN
+Content:
+$$\begin{align*}
+&(\forall t)(DIENVIEN(t) \ \wedge \ (\nexists s)(DIENVIEN(s) \ \wedge \\
+&t.MADV = s.MADV \ \wedge \\
+&(t.HODV \neq s.HODV \ \vee \ t.TENDV \neq s.TENDV \ \vee \ t.GIOITINH \neq s.GIOITINH )))
+\end{align*}$$
+#### b) Mỗi phim, đạo diễn có một xxx duy nhất...
+...
+#### c) Mỗi diễn viên tham gia vai diễn trong nhiều phim, mỗi phim có nhiều diễn viên tham gia
+Context: DIENVIEN, THAMGIA, PHIM
+Content:
+$$\begin{align*}
+&((\forall t)(DIENVIEN(t) \ \wedge \ (\exists s)(THAMGIA(s) \ \wedge \ t.MADV = s.MADV))) \\
+&\wedge \\
+&((\forall t)(PHIM(t) \ \wedge \ (\exists s)(THAMGIA(s) \ \wedge \ t.MAPH = s.MAPH)))
+\end{align*}$$
+Influence Table
+
+|          | insert | delete | modify        |
+| -------- | ------ | ------ | ------------- |
+| DIENVIEN | +      | +      | +(MADV)       |
+| THAMGIA  | -      | +      | +(MADV, MAPH) |
+| PHIM     | +      | +      | +(MAPH)       |
+## 3
+**THUEXE**(***MAKH, SOHD***, TENKH, SOGIOTHUE, SOXE, MAUXE)
+f1: MAKH, SOHD -> TENKH, SOGIOTHUE, SOXE, MAUXE
+f2: MAKH -> TENKH
+f3: SOXE -> MAUXE
+
+Phụ thuộc 1 phần:
+```python
+f2: MAKH -> TENKH
+```
+Phụ thuộc bắc cầu:
+```python
+f3: SOXE -> MAUXE # (SOXE là non-prime attribute)
+```
+#### a) Quan hệ THUEXE có ở dạng 3NF không? Giải thích.
+Quan hệ thuê xe ở dạng chuẩn 1NF. Vì còn phụ thuộc 1 phần và phụ thuộc bắc cầu nên THUEXE không ở dạng 3NF.
+
+#### b) Phân tách thành dạng 3NF
+Tách phụ thuộc 1 phần và phụ thuộc bắc cầu sang  thành các lược đồ quan hệ mới, lúc này lược đồ cơ sở dữ liệu quan hệ trở thành:
+```python
+R1(MAKH, SOHD, SOGIOTHUE, SOXE)
+f1: MAKH, SOHD -> SOGIOTHUE, SOXE
+
+R2(MAKH, TENKH)
+f2: MAKH -> TENKH
+
+R3(SOXE, MAUXE)
+f3: SOXE -> MAUXE
+```
+
+# 5
+**TUYENBUYT**(***MATB***, TENTUYEN, CULY, SOCHUYEN, LOAIXE, MADV)
+**DVVANHANH**(***MADV***, TENDONVI)
+**XEBUYT**(***BIENSO***, LOAIXE, HIEUXE, SOCHONGOI, MATB)
+```python
+f1: MATB -> TENTUYEN, CULY, SOCHUYEN, LOAIXE, MADV
+f2: MADV -> TENDONVI
+f3: BIENSO -> LOAIXE, HIEUXE, SOCHONGOI, MATB
+f4: LOAIXE, HIEUXE -> SOCHONGOI
+```
+## 1 - TRUY VẤN (relational algebra)
+#### a) Cho biết BIENSO, HIEUXE, SOCHONGOI của các thuyết xe buýt chạy tuyến "Ben Thanh - BX Cho Lon"
+$$\begin{align*}
+\pi_{_{BIENSO, HIEUXE, SOCHONGOI}} \sigma_{_{TENTUYEN = 'Ben Thanh - BX Cho Lon'}}(XEBUYT \Join TUYENBUYT)
+\end{align*}$$
+
+#### b) Với mỗi tuyến buýt cho biết MATB, TENTUYEN, LOAIXE và tổng số xe buýt dùng chở khách trên tuyến đó.
+$$\begin{align*}
+\pi_{_{MATB, TENTUYEN, LOAIXE, COUNT\_BIENSO}} \ (_{_{MATB, TENTUYEN, LOAIXE}}ℱ_{_{COUNT(BIENSO)}}(XEBUYT \Join TUYENBUYT))
+\end{align*}$$
+
+## 2 
+Mô tả ràng buộc toàn vẹn sau:
+>Mỗi tuyến xe buýt phải có ít nhất 5 xe buýt sử dụng vận chuyển hành khách
+
+Context: TUYENBUYT, XEBUYT
+Content:
+$$\begin{align*}
+&(\forall t)(TUYENBUYT(t) \ \wedge \ (\forall s)(XEBUYT(s) \ \wedge \ t.MATB = s.MATB) \ \wedge \ count(s) \geq 5)
+\end{align*}$$
+(trong slide thầy dùng card thay cho count, nên dùng card)
+$$\begin{align*}
+&(\forall t)(TUYENBUYT(t) \ \wedge \ card(\{ s | XEBUYT(s) \ \wedge \ t.MATB = s.MATB\}) \geq 5)
+\end{align*}$$
+Influence Table:
+
+|           | insert | delete | modify  |
+| --------- | ------ | ------ | ------- |
+| TUYENBUYT | +      | -      | +(MATB) |
+| XEBUYT    | -      | +      | +(MATB) |
+## 3
+#### a) Cho biết dạng chuẩn cao nhất của các quan hệ TUYENBUYT, DVVANHANH, XEBUYT
+Phụ thuộc bắc cầu
+```python
+f4: LOAIXE, HIEUXE -> SOCHONGOI
+```
+Các quan hệ TUYENBUYT và DVVANHANH đạt chuẩn BCNF vì không có phụ thuộc 1 phần, phụ thuộc bắc cầu, và các yếu tố quyết định(determinant) trong các phụ thuộc hàm đều là siêu khóa.
+Quan hệ  XEBUYT đạt 2NF vì không có phụ thuộc 1 phần nhưng có phụ thuộc bắc cầu.
+#### b) Chỉ ra điểm trùng lặp thông tin và đưa về chuẩn BCNF.
+Tách phụ thuộc bắc cầu $f_4$ thành một quan hệ mới.
+Lược đồ cơ sở dữ liệu quan hệ lúc này trở thành:
+```python
+R1(MATB, TENTUYEN, CULY, SOCHUYEN, LOAIXE, MADV)
+f1: MATB -> TENTUYEN, CULY, SOCHUYEN, LOAIXE, MADV
+
+R2(MADV, TENDONVI)
+f2: MADV -> TENDONVI
+
+R3(BIENSO, LOAIXE, HIEUXE, MATB)
+f3: BIENSO -> LOAIXE, HIEUXE, MATB
+
+R4(LOAIXE, HIEUXE, SOCHONGOI)
+f4: LOAIXE, HIEUXE -> SOCHONGOI
+```
+
+# 6
+**SINHVIEN**(***MASV, MAHP,* *HOCKY***, HOTEN, MANDT, KHOA, DIEM)
+**HOCPHAN**(***MAHP***, TENHP, SOTC, MACTDT, MANDT, KHOA)
+```python
+f1: MASV -> HOTEN, MANDT, KHOA
+f2: MASV, MAHP, HOCKY -> DIEM
+f3: MAHP -> TENHP, SOTC, MACTDT, MANDT, KHOA
+f4: MACTDT -> MANDT, KHOA
+```
+## 1 - TRUY VẤN (relational algebra)
+#### a) Cho biết MAHP, TENHP, SOTC của các học phần thuộc chương trình đào tạo có mã số là 7460101.
+$$\begin{align*}
+\pi_{_{MAHP, TENHP, SOTC}}\sigma_{_{MACTDT = '7460101'}}(HOCPHAN)
+\end{align*}$$
+#### b) Cho MAHP, TENHP, SOTC, HOCKY, DIEM của các học phần mà sinh viên có mã số 1911912 tham dự.
+$$\begin{align*}
+\pi_{_{MAHP, TENHP, SOTC, HOCKY, DIEM}}\sigma_{_{MASV = '1911912'}}(SINHVIEN \Join HOCPHAN)
+\end{align*}$$
+## 2. Mô tả ràng buộc toàn vẹn
+> Một sinh viên không được tham dự nhiều hơn 8 học phần trong 1 kỳ.
+
+Context: SINHVIEN
+Content:
+$$\begin{align*}
+&R \leftarrow _{_{MASV, HOCKY}}\mathscr{F}_{_{COUNT(MAHP)}}(SINHVIEN) \\
+&(\forall t)(R(t) \ \wedge (COUNT\_MAHP \leq 8))
+\end{align*}$$
+Influence Table:
+
+|          | insert | delete | modify         |
+| -------- | ------ | ------ | -------------- |
+| SINHVIEN | +      | -      | +(MASV, HOCKY) |
+## 3
+Phụ thuộc một phần:
+```python
+f1: MASV -> HOTEN, MANDT, KHOA
+```
+Phụ thuộc bắc cầu:
+```python
+f4: MACTDT -> MANDT, KHOA
+```
+#### a) Cho biết dạng chuẩn cao nhất của SINHVIEN, HOCPHAN
+Chuẩn cao nhất trong SINHVIEN, HOCPHAN là 2NF.
+Trong đó:
+- SINHVIEN đạt 1NF vì còn phụ thuộc một phần.
+- HOCPHAN đạt 2NF vì còn phụ thuộc bắc cầu.
+
+#### b) Chỉ ra điểm trùng lặp và chuẩn hóa về BCNF.
+Các điểm trùng lặp trong các phụ thuộc một phần và bắc cầu nêu trên.
+Cách chuẩn hóa: Tạo quan hệ mới dựa trên các phụ thuộc.
+Ta có lược đồ cơ sở dữ liệu mới:
+```python
+R1(MASV, HOTEN, MANDT, KHOA)
+f1: MASV -> HOTEN, MANDT, KHOA
+
+R2(MASV, MAHP, HOCKY, DIEM)
+f2: MASV, MAHP, HOCKY -> DIEM
+
+R3(MAHP, TENHP, SOTC, MACTDT)
+f3: MAHP -> TENHP, SOTC, MACTDT
+
+R4(MACTDT, MANDT, KHOA)
+f4: MACTDT -> MANDT, KHOA
+```
